@@ -358,14 +358,14 @@ func _init_owner(p_owner: GodotAudioManager, p_name: String, p_parent: Node3D) -
 	_audio_stream_player.set_meta("name", get_audio_name())
 	_set_loop(stream, loop)
 	
+	_audio_stream_player.finished.connect(_on_audio_stream_player_finished)
+
 	if p_parent:
 		p_parent.add_child.call_deferred(_audio_stream_player)
+		await _audio_stream_player.tree_entered
 	else:
 		_owner.add_child(_audio_stream_player)
 		
-	await _audio_stream_player.tree_entered
-	_audio_stream_player.finished.connect(_on_audio_stream_player_finished)
-	
 	
 func _change_parent(p_parent: Node3D) -> void:
 	if p_parent:
