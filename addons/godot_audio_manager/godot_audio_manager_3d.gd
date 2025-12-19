@@ -326,6 +326,10 @@ var _audio_name: String
 var _parent: Node3D
 
 
+func _init() -> void:
+	self.resource_local_to_scene = true
+
+
 func _init_owner(p_owner: GodotAudioManager, p_name: String, p_parent: Node3D) -> void:
 	_owner = p_owner
 	_audio_name = p_name

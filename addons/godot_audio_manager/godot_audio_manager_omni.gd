@@ -171,6 +171,10 @@ var _audio_stream_player: AudioStreamPlayer
 var _audio_name: String
 
 
+func _init() -> void:
+	self.resource_local_to_scene = true
+
+	
 func _init_owner(p_owner: GodotAudioManager, p_name: String) -> void:
 	_owner = p_owner
 	_audio_name = p_name
