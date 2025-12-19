@@ -138,93 +138,113 @@ func _get_configuration_warnings() -> PackedStringArray:
 #region AUDIO OMNI *********************************************************************************
 ## Plays a sound from the beginning, or the given from_position in seconds.
 func play_omni(audio_name: String, from_position: float = 0.0) -> void:
-	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().play(from_position)
+	var find_audio: GodotAudioManagerOmni = get_audio_omni(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.play(from_position)
 
 
 ## Stops all sounds from this node.
 func stop_omni(audio_name: String) -> void:
-	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().stop()
+	var find_audio: GodotAudioManagerOmni = get_audio_omni(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.stop()
 	
 	
 ## The sounds are paused.
 func pause_omni(audio_name: String) -> void:
-	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().stream_paused = true
+	var find_audio: GodotAudioManagerOmni = get_audio_omni(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.stream_paused = true
 	
 	
 ## Resumes paused sounds.
 func unpause_omni(audio_name: String) -> void:
-	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().stream_paused = false
+	var find_audio: GodotAudioManagerOmni = get_audio_omni(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.stream_paused = false
 	
 	
 ## Check if the sound is playing.
 func is_playing_omni(audio_name: String) -> bool:
-	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return false
-	return find_audio.get_audio().playing
+	var find_audio: GodotAudioManagerOmni = get_audio_omni(audio_name)
+	if not find_audio: return false
+	var get_audio: AudioStreamPlayer = find_audio.get_audio()
+	if not get_audio: return false
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.playing
 	
 
 ## Check if the sound is paused.
 func is_paused_omni(audio_name: String) -> bool:
-	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return false
-	return find_audio.get_audio().stream_paused
+	var find_audio: GodotAudioManagerOmni = get_audio_omni(audio_name)
+	if not find_audio: return false
+	var get_audio: AudioStreamPlayer = find_audio.get_audio()
+	if not get_audio: return false
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.stream_paused
 	
 
 ## Restarts all sounds to be played from the given to_position, in seconds. Does nothing if no sounds are playing.
 func seek_omni(audio_name: String, position: float) -> void:
-	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().seek(position)
+	var find_audio: GodotAudioManagerOmni = get_audio_omni(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.seek(position)
 	
 
 ## Returns the position in the AudioStream of the latest sound, in seconds. Returns 0.0 if no sounds are playing.
 func get_playback_position_omni(audio_name: String) -> float:
-	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return 0.0
-	return find_audio.get_audio().get_playback_position()
+	var find_audio: GodotAudioManagerOmni = get_audio_omni(audio_name)
+	if not find_audio: return 0.0
+	var get_audio: AudioStreamPlayer = find_audio.get_audio()
+	if not get_audio: return 0.0
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.get_playback_position()
 	
 
 ## Returns the latest AudioStreamPlayback of this node, usually the most recently created by play(). 
 ## If no sounds are playing, this method fails and returns an empty playback.
 func get_stream_playback_omni(audio_name: String) -> AudioStreamPlayback:
-	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return null
-	return find_audio.get_audio().get_stream_playback()
+	var find_audio: GodotAudioManagerOmni = get_audio_omni(audio_name)
+	if not find_audio: return null
+	var get_audio: AudioStreamPlayer = find_audio.get_audio()
+	if not get_audio: return null
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.get_stream_playback()
 	
 	
 ## Returns true if any sound is active, even if stream_paused is set to true. See also playing and get_stream_playback().
 func has_stream_playback_omni(audio_name: String) -> bool:
-	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return false
-	return find_audio.get_audio().has_stream_playback()
+	var find_audio: GodotAudioManagerOmni = get_audio_omni(audio_name)
+	if not find_audio: return false
+	var get_audio: AudioStreamPlayer = find_audio.get_audio()
+	if not get_audio: return false
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.has_stream_playback()
 
 
 ## Get omni audio.
@@ -237,10 +257,12 @@ func get_audio_omni(audio_name: String) -> GodotAudioManagerOmni:
 
 ## Enable loop.
 func set_loop_omni(audio_name: String, value: bool) -> void:
-	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
+	var find_audio: GodotAudioManagerOmni = get_audio_omni(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
 	find_audio._set_loop(find_audio.stream, value)
 	
 	
@@ -261,93 +283,113 @@ func _check_audios_omni(p_warnings: PackedStringArray) -> void:
 #region AUDIO 2D *********************************************************************************
 ## Plays a sound from the beginning, or the given from_position in seconds.
 func play_2d(audio_name: String, from_position: float = 0.0) -> void:
-	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().play(from_position)
+	var find_audio: GodotAudioManager2D = get_audio_2d(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer2D = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.play(from_position)
 
 
 ## Stops all sounds from this node.
 func stop_2d(audio_name: String) -> void:
-	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().stop()
+	var find_audio: GodotAudioManager2D = get_audio_2d(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer2D = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.stop()
 	
 	
 ## The sounds are paused.
 func pause_2d(audio_name: String) -> void:
-	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().stream_paused = true
+	var find_audio: GodotAudioManager2D = get_audio_2d(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer2D = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.stream_paused = true
 	
 	
 ## Resumes paused sounds.
 func unpause_2d(audio_name: String) -> void:
-	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().stream_paused = false
+	var find_audio: GodotAudioManager2D = get_audio_2d(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer2D = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.stream_paused = false
 	
 	
 ## Check if the sound is playing.
 func is_playing_2d(audio_name: String) -> bool:
-	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return false
-	return find_audio.get_audio().playing
+	var find_audio: GodotAudioManager2D = get_audio_2d(audio_name)
+	if not find_audio: return false
+	var get_audio: AudioStreamPlayer2D = find_audio.get_audio()
+	if not get_audio: return false
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.playing
 	
 
 ## Check if the sound is paused.
 func is_paused_2d(audio_name: String) -> bool:
-	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return false
-	return find_audio.get_audio().stream_paused
+	var find_audio: GodotAudioManager2D = get_audio_2d(audio_name)
+	if not find_audio: return false
+	var get_audio: AudioStreamPlayer2D = find_audio.get_audio()
+	if not get_audio: return false
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.stream_paused
 	
 
 ## Restarts all sounds to be played from the given to_position, in seconds. Does nothing if no sounds are playing.
 func seek_2d(audio_name: String, position: float) -> void:
-	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().seek(position)
+	var find_audio: GodotAudioManager2D = get_audio_2d(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer2D = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.seek(position)
 	
 
 ## Returns the position in the AudioStream of the latest sound, in seconds. Returns 0.0 if no sounds are playing.
 func get_playback_position_2d(audio_name: String) -> float:
-	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return 0.0
-	return find_audio.get_audio().get_playback_position()
+	var find_audio: GodotAudioManager2D = get_audio_2d(audio_name)
+	if not find_audio: return 0.0
+	var get_audio: AudioStreamPlayer2D = find_audio.get_audio()
+	if not get_audio: return 0.0
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.get_playback_position()
 	
 
 ## Returns the latest AudioStreamPlayback of this node, usually the most recently created by play(). 
 ## If no sounds are playing, this method fails and returns an empty playback.
 func get_stream_playback_2d(audio_name: String) -> AudioStreamPlayback:
-	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return null
-	return find_audio.get_audio().get_stream_playback()
+	var find_audio: GodotAudioManager2D = get_audio_2d(audio_name)
+	if not find_audio: return null
+	var get_audio: AudioStreamPlayer2D = find_audio.get_audio()
+	if not get_audio: return null
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.get_stream_playback()
 	
 	
 ## Returns true if any sound is active, even if stream_paused is set to true. See also playing and get_stream_playback().
 func has_stream_playback_2d(audio_name: String) -> bool:
-	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return false
-	return find_audio.get_audio().has_stream_playback()
+	var find_audio: GodotAudioManager2D = get_audio_2d(audio_name)
+	if not find_audio: return false
+	var get_audio: AudioStreamPlayer2D = find_audio.get_audio()
+	if not get_audio: return false
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.has_stream_playback()
 
 
 ## Get 2d audio.
@@ -360,10 +402,12 @@ func get_audio_2d(audio_name: String) -> GodotAudioManager2D:
 
 ## Enable loop.
 func set_loop_2d(audio_name: String, value: bool) -> void:
-	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
+	var find_audio: GodotAudioManager2D = get_audio_2d(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer2D = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
 	find_audio._set_loop(find_audio.stream, value)
 	
 
@@ -384,93 +428,113 @@ func _check_audios_2d(p_warnings: PackedStringArray) -> void:
 #region AUDIO 3D *********************************************************************************
 ## Plays a sound from the beginning, or the given from_position in seconds.
 func play_3d(audio_name: String, from_position: float = 0.0) -> void:
-	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().play(from_position)
+	var find_audio: GodotAudioManager3D = get_audio_3d(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer3D = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.play(from_position)
 
 
 ## Stops all sounds from this node.
 func stop_3d(audio_name: String) -> void:
-	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().stop()
+	var find_audio: GodotAudioManager3D = get_audio_3d(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer3D = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.stop()
 	
 	
 ## The sounds are paused.
 func pause_3d(audio_name: String) -> void:
-	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().stream_paused = true
+	var find_audio: GodotAudioManager3D = get_audio_3d(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer3D = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.stream_paused = true
 	
 	
 ## Resumes paused sounds.
 func unpause_3d(audio_name: String) -> void:
-	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().stream_paused = false
+	var find_audio: GodotAudioManager3D = get_audio_3d(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer3D = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.stream_paused = false
 	
 	
 ## Check if the sound is playing.
 func is_playing_3d(audio_name: String) -> bool:
-	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return false
-	return find_audio.get_audio().playing
+	var find_audio: GodotAudioManager3D = get_audio_3d(audio_name)
+	if not find_audio: return false
+	var get_audio: AudioStreamPlayer3D = find_audio.get_audio()
+	if not get_audio: return false
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.playing
 	
 
 ## Check if the sound is paused.
 func is_paused_3d(audio_name: String) -> bool:
-	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return false
-	return find_audio.get_audio().stream_paused
+	var find_audio: GodotAudioManager3D = get_audio_3d(audio_name)
+	if not find_audio: return false
+	var get_audio: AudioStreamPlayer3D = find_audio.get_audio()
+	if not get_audio: return false
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.stream_paused
 	
 
 ## Restarts all sounds to be played from the given to_position, in seconds. Does nothing if no sounds are playing.
 func seek_3d(audio_name: String, position: float) -> void:
-	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
-	find_audio.get_audio().seek(position)
+	var find_audio: GodotAudioManager3D = get_audio_3d(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer3D = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	get_audio.seek(position)
 	
 
 ## Returns the position in the AudioStream of the latest sound, in seconds. Returns 0.0 if no sounds are playing.
 func get_playback_position_3d(audio_name: String) -> float:
-	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return 0.0
-	return find_audio.get_audio().get_playback_position()
+	var find_audio: GodotAudioManager3D = get_audio_3d(audio_name)
+	if not find_audio: return 0.0
+	var get_audio: AudioStreamPlayer3D = find_audio.get_audio()
+	if not get_audio: return 0.0
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.get_playback_position()
 	
 
 ## Returns the latest AudioStreamPlayback of this node, usually the most recently created by play(). 
 ## If no sounds are playing, this method fails and returns an empty playback.
 func get_stream_playback_3d(audio_name: String) -> AudioStreamPlayback:
-	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return null
-	return find_audio.get_audio().get_stream_playback()
+	var find_audio: GodotAudioManager3D = get_audio_3d(audio_name)
+	if not find_audio: return null
+	var get_audio: AudioStreamPlayer3D = find_audio.get_audio()
+	if not get_audio: return null
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.get_stream_playback()
 	
 	
 ## Returns true if any sound is active, even if stream_paused is set to true. See also playing and get_stream_playback().
 func has_stream_playback_3d(audio_name: String) -> bool:
-	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return false
-	return find_audio.get_audio().has_stream_playback()
+	var find_audio: GodotAudioManager3D = get_audio_3d(audio_name)
+	if not find_audio: return false
+	var get_audio: AudioStreamPlayer3D = find_audio.get_audio()
+	if not get_audio: return false
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
+	return get_audio.has_stream_playback()
 
 
 ## Get 3d audio.
@@ -483,10 +547,12 @@ func get_audio_3d(audio_name: String) -> GodotAudioManager3D:
 
 ## Enable loop.
 func set_loop_3d(audio_name: String, value: bool) -> void:
-	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
-	if not find_audio:
-		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
-		return
+	var find_audio: GodotAudioManager3D = get_audio_3d(audio_name)
+	if not find_audio: return
+	var get_audio: AudioStreamPlayer3D = find_audio.get_audio()
+	if not get_audio: return
+	if not get_audio.is_inside_tree():
+		await get_audio.tree_entered
 	find_audio._set_loop(find_audio.stream, value)
 	
 
