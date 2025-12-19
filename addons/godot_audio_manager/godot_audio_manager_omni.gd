@@ -150,6 +150,7 @@ class_name GodotAudioManagerOmni extends Resource
 
 
 #region CONSTANTS **********************************************************************************
+const META_OMNI: String = "am_omni"
 const AUDIO_STREAM_CLASS_NAME: String = "AudioStream"
 const AUDIO_STREAM_MICROPHONE_CLASS_NAME: String = "AudioStreamMicrophone"
 const AUDIO_STREAM_RANDOMIZER_CLASS_NAME: String = "AudioStreamRandomizer"
@@ -187,6 +188,7 @@ func _init_owner(p_owner: GodotAudioManager, p_name: String) -> void:
 	_audio_stream_player.playback_type = playback_type
 	
 	_audio_stream_player.name = get_audio_name(true)
+	_audio_stream_player.set_meta(META_OMNI, true)
 	_audio_stream_player.set_meta("name", get_audio_name())
 	_set_loop(stream, loop)
 	
