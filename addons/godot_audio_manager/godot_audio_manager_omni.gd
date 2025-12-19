@@ -189,7 +189,6 @@ func _init_owner(p_owner: GodotAudioManager, p_name: String) -> void:
 	
 	_audio_stream_player.name = get_audio_name(true)
 	_audio_stream_player.set_meta(META_OMNI, true)
-	_audio_stream_player.set_meta("pause_on_blur", pause_on_blur)
 	_audio_stream_player.set_meta("name", get_audio_name())
 	_set_loop(stream, loop)
 	
