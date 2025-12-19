@@ -1,6 +1,8 @@
 @tool
 @icon("res://addons/godot_audio_manager/icons/icon.svg")
 
+# FIXME: Quando o audio manager está em uma cena e essa cenda é duplicada na cena main,
+# o audio dá erro ao conectar ao sinal finished. Parece que nao está sendo duplicado.
 
 ## Manage all audio files such as AudioStreamPlayer, AudioStreamPlayer2D, and AudioStreamPlayer3D 
 ## directly from a single node, and enjoy extra features like the ability to loop all audio types 
