@@ -13,12 +13,12 @@ class_name GodotAudioManager extends Node
 #region EXPORTS ************************************************************************************
 @export_subgroup("Audios Omni")
 ## These are the audio files that represent the AudioStreamPlayer (one-way audio).
-@export var audios_omni: Dictionary[String, GodotAudioManagerOmni]:
+@export var audios_manager_omni: Dictionary[String, GodotAudioManagerOmni]:
 	set(value):
-		audios_omni = value
+		audios_manager_omni = value
 		if not is_node_ready(): return
-		for key in audios_omni:
-			var audio_omni: GodotAudioManagerOmni = audios_omni.get(key)
+		for key in audios_manager_omni:
+			var audio_omni: GodotAudioManagerOmni = audios_manager_omni.get(key)
 			if audio_omni:
 				audio_omni._init_owner(self, key)
 		update_configuration_warnings()
@@ -30,19 +30,19 @@ class_name GodotAudioManager extends Node
 	set(value):
 		parent_2d = value
 		if Engine.is_editor_hint() or not is_node_ready(): return
-		for key in audios_2d:
-			var audio_2d: GodotAudioManager2D = audios_2d.get(key)
+		for key in audios_manager_2d:
+			var audio_2d: GodotAudioManager2D = audios_manager_2d.get(key)
 			if audio_2d:
 				audio_2d._change_parent(parent_2d)
 		update_configuration_warnings()
 
 ## These are the audio files that represent AudioStreamPlayer2D.
-@export var audios_2d: Dictionary[String, GodotAudioManager2D]:
+@export var audios_manager_2d: Dictionary[String, GodotAudioManager2D]:
 	set(value):
-		audios_2d = value
+		audios_manager_2d = value
 		if not is_node_ready(): return
-		for key in audios_2d:
-			var audio_2d: GodotAudioManager2D = audios_2d.get(key)
+		for key in audios_manager_2d:
+			var audio_2d: GodotAudioManager2D = audios_manager_2d.get(key)
 			if audio_2d:
 				audio_2d._init_owner(self, key, parent_2d)
 		update_configuration_warnings()
@@ -54,19 +54,19 @@ class_name GodotAudioManager extends Node
 	set(value):
 		parent_3d = value
 		if Engine.is_editor_hint() or not is_node_ready(): return
-		for key in audios_3d:
-			var audio_3d: GodotAudioManager3D = audios_3d.get(key)
+		for key in audios_manager_3d:
+			var audio_3d: GodotAudioManager3D = audios_manager_3d.get(key)
 			if audio_3d:
 				audio_3d._change_parent(parent_3d)
 		update_configuration_warnings()
 
 ## These are the audio files that represent AudioStreamPlayer3D.
-@export var audios_3d: Dictionary[String, GodotAudioManager3D]:
+@export var audios_manager_3d: Dictionary[String, GodotAudioManager3D]:
 	set(value):
-		audios_3d = value
+		audios_manager_3d = value
 		if not is_node_ready(): return
-		for key in audios_3d:
-			var audio_3d: GodotAudioManager3D = audios_3d.get(key)
+		for key in audios_manager_3d:
+			var audio_3d: GodotAudioManager3D = audios_manager_3d.get(key)
 			if audio_3d:
 				audio_3d._init_owner(self, key, parent_3d)
 		update_configuration_warnings()
@@ -96,18 +96,18 @@ var _focus_ref = JavaScriptBridge.create_callback(_on_web_focus)
 
 #region ENGINE METHODS *****************************************************************************
 func _ready() -> void:
-	for key in audios_omni:
-		var audio_omni: GodotAudioManagerOmni = audios_omni.get(key)
+	for key in audios_manager_omni:
+		var audio_omni: GodotAudioManagerOmni = audios_manager_omni.get(key)
 		if audio_omni:
 			audio_omni._init_owner(self, key)
 			
-	for key in audios_2d:
-		var audio_2d: GodotAudioManager2D = audios_2d.get(key)
+	for key in audios_manager_2d:
+		var audio_2d: GodotAudioManager2D = audios_manager_2d.get(key)
 		if audio_2d:
 			audio_2d._init_owner(self, key, parent_2d)
 
-	for key in audios_3d:
-		var audio_3d: GodotAudioManager3D = audios_3d.get(key)
+	for key in audios_manager_3d:
+		var audio_3d: GodotAudioManager3D = audios_manager_3d.get(key)
 		if audio_3d:
 			audio_3d._init_owner(self, key, parent_3d)
 
@@ -138,7 +138,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 #region AUDIO OMNI *********************************************************************************
 ## Plays a sound from the beginning, or the given from_position in seconds.
 func play_omni(audio_name: String, from_position: float = 0.0) -> void:
-	var find_audio: GodotAudioManagerOmni = audios_omni.get(audio_name)
+	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -147,7 +147,7 @@ func play_omni(audio_name: String, from_position: float = 0.0) -> void:
 
 ## Stops all sounds from this node.
 func stop_omni(audio_name: String) -> void:
-	var find_audio: GodotAudioManagerOmni = audios_omni.get(audio_name)
+	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -156,7 +156,7 @@ func stop_omni(audio_name: String) -> void:
 	
 ## The sounds are paused.
 func pause_omni(audio_name: String) -> void:
-	var find_audio: GodotAudioManagerOmni = audios_omni.get(audio_name)
+	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -165,7 +165,7 @@ func pause_omni(audio_name: String) -> void:
 	
 ## Resumes paused sounds.
 func unpause_omni(audio_name: String) -> void:
-	var find_audio: GodotAudioManagerOmni = audios_omni.get(audio_name)
+	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -174,7 +174,7 @@ func unpause_omni(audio_name: String) -> void:
 	
 ## Check if the sound is playing.
 func is_playing_omni(audio_name: String) -> bool:
-	var find_audio: GodotAudioManagerOmni = audios_omni.get(audio_name)
+	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return false
@@ -183,7 +183,7 @@ func is_playing_omni(audio_name: String) -> bool:
 
 ## Check if the sound is paused.
 func is_paused_omni(audio_name: String) -> bool:
-	var find_audio: GodotAudioManagerOmni = audios_omni.get(audio_name)
+	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return false
@@ -192,7 +192,7 @@ func is_paused_omni(audio_name: String) -> bool:
 
 ## Restarts all sounds to be played from the given to_position, in seconds. Does nothing if no sounds are playing.
 func seek_omni(audio_name: String, position: float) -> void:
-	var find_audio: GodotAudioManagerOmni = audios_omni.get(audio_name)
+	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -201,7 +201,7 @@ func seek_omni(audio_name: String, position: float) -> void:
 
 ## Returns the position in the AudioStream of the latest sound, in seconds. Returns 0.0 if no sounds are playing.
 func get_playback_position_omni(audio_name: String) -> float:
-	var find_audio: GodotAudioManagerOmni = audios_omni.get(audio_name)
+	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return 0.0
@@ -211,7 +211,7 @@ func get_playback_position_omni(audio_name: String) -> float:
 ## Returns the latest AudioStreamPlayback of this node, usually the most recently created by play(). 
 ## If no sounds are playing, this method fails and returns an empty playback.
 func get_stream_playback_omni(audio_name: String) -> AudioStreamPlayback:
-	var find_audio: GodotAudioManagerOmni = audios_omni.get(audio_name)
+	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return null
@@ -220,7 +220,7 @@ func get_stream_playback_omni(audio_name: String) -> AudioStreamPlayback:
 	
 ## Returns true if any sound is active, even if stream_paused is set to true. See also playing and get_stream_playback().
 func has_stream_playback_omni(audio_name: String) -> bool:
-	var find_audio: GodotAudioManagerOmni = audios_omni.get(audio_name)
+	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return false
@@ -229,7 +229,7 @@ func has_stream_playback_omni(audio_name: String) -> bool:
 
 ## Get omni audio.
 func get_audio_omni(audio_name: String) -> GodotAudioManagerOmni:
-	var find_audio: GodotAudioManagerOmni = audios_omni.get(audio_name)
+	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 	return find_audio
@@ -237,7 +237,7 @@ func get_audio_omni(audio_name: String) -> GodotAudioManagerOmni:
 
 ## Enable loop.
 func set_loop_omni(audio_name: String, value: bool) -> void:
-	var find_audio: GodotAudioManagerOmni = audios_omni.get(audio_name)
+	var find_audio: GodotAudioManagerOmni = audios_manager_omni.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -245,8 +245,8 @@ func set_loop_omni(audio_name: String, value: bool) -> void:
 	
 	
 func _check_audios_omni(p_warnings: PackedStringArray) -> void:
-	for key in audios_omni:
-		var audio: GodotAudioManagerOmni = audios_omni.get(key)
+	for key in audios_manager_omni:
+		var audio: GodotAudioManagerOmni = audios_manager_omni.get(key)
 		if audio:
 			if key == "":
 				p_warnings.append("There are omni audio files without a defined name. Consider adding a name as a key to the omni audio file that is missing a key.")
@@ -261,7 +261,7 @@ func _check_audios_omni(p_warnings: PackedStringArray) -> void:
 #region AUDIO 2D *********************************************************************************
 ## Plays a sound from the beginning, or the given from_position in seconds.
 func play_2d(audio_name: String, from_position: float = 0.0) -> void:
-	var find_audio: GodotAudioManager2D = audios_2d.get(audio_name)
+	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -270,7 +270,7 @@ func play_2d(audio_name: String, from_position: float = 0.0) -> void:
 
 ## Stops all sounds from this node.
 func stop_2d(audio_name: String) -> void:
-	var find_audio: GodotAudioManager2D = audios_2d.get(audio_name)
+	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -279,7 +279,7 @@ func stop_2d(audio_name: String) -> void:
 	
 ## The sounds are paused.
 func pause_2d(audio_name: String) -> void:
-	var find_audio: GodotAudioManager2D = audios_2d.get(audio_name)
+	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -288,7 +288,7 @@ func pause_2d(audio_name: String) -> void:
 	
 ## Resumes paused sounds.
 func unpause_2d(audio_name: String) -> void:
-	var find_audio: GodotAudioManager2D = audios_2d.get(audio_name)
+	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -297,7 +297,7 @@ func unpause_2d(audio_name: String) -> void:
 	
 ## Check if the sound is playing.
 func is_playing_2d(audio_name: String) -> bool:
-	var find_audio: GodotAudioManager2D = audios_2d.get(audio_name)
+	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return false
@@ -306,7 +306,7 @@ func is_playing_2d(audio_name: String) -> bool:
 
 ## Check if the sound is paused.
 func is_paused_2d(audio_name: String) -> bool:
-	var find_audio: GodotAudioManager2D = audios_2d.get(audio_name)
+	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return false
@@ -315,7 +315,7 @@ func is_paused_2d(audio_name: String) -> bool:
 
 ## Restarts all sounds to be played from the given to_position, in seconds. Does nothing if no sounds are playing.
 func seek_2d(audio_name: String, position: float) -> void:
-	var find_audio: GodotAudioManager2D = audios_2d.get(audio_name)
+	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -324,7 +324,7 @@ func seek_2d(audio_name: String, position: float) -> void:
 
 ## Returns the position in the AudioStream of the latest sound, in seconds. Returns 0.0 if no sounds are playing.
 func get_playback_position_2d(audio_name: String) -> float:
-	var find_audio: GodotAudioManager2D = audios_2d.get(audio_name)
+	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return 0.0
@@ -334,7 +334,7 @@ func get_playback_position_2d(audio_name: String) -> float:
 ## Returns the latest AudioStreamPlayback of this node, usually the most recently created by play(). 
 ## If no sounds are playing, this method fails and returns an empty playback.
 func get_stream_playback_2d(audio_name: String) -> AudioStreamPlayback:
-	var find_audio: GodotAudioManager2D = audios_2d.get(audio_name)
+	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return null
@@ -343,7 +343,7 @@ func get_stream_playback_2d(audio_name: String) -> AudioStreamPlayback:
 	
 ## Returns true if any sound is active, even if stream_paused is set to true. See also playing and get_stream_playback().
 func has_stream_playback_2d(audio_name: String) -> bool:
-	var find_audio: GodotAudioManager2D = audios_2d.get(audio_name)
+	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return false
@@ -352,7 +352,7 @@ func has_stream_playback_2d(audio_name: String) -> bool:
 
 ## Get 2d audio.
 func get_audio_2d(audio_name: String) -> GodotAudioManager2D:
-	var find_audio: GodotAudioManager2D = audios_2d.get(audio_name)
+	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 	return find_audio
@@ -360,7 +360,7 @@ func get_audio_2d(audio_name: String) -> GodotAudioManager2D:
 
 ## Enable loop.
 func set_loop_2d(audio_name: String, value: bool) -> void:
-	var find_audio: GodotAudioManager2D = audios_2d.get(audio_name)
+	var find_audio: GodotAudioManager2D = audios_manager_2d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -368,8 +368,8 @@ func set_loop_2d(audio_name: String, value: bool) -> void:
 	
 
 func _check_audios_2d(p_warnings: PackedStringArray) -> void:
-	for key in audios_2d:
-		var audio: GodotAudioManager2D = audios_2d.get(key)
+	for key in audios_manager_2d:
+		var audio: GodotAudioManager2D = audios_manager_2d.get(key)
 		if audio:
 			if key == "":
 				p_warnings.append("There are 2d audio files without a defined name. Consider adding a name as a key to the 2d audio file that is missing a key.")
@@ -384,7 +384,7 @@ func _check_audios_2d(p_warnings: PackedStringArray) -> void:
 #region AUDIO 3D *********************************************************************************
 ## Plays a sound from the beginning, or the given from_position in seconds.
 func play_3d(audio_name: String, from_position: float = 0.0) -> void:
-	var find_audio: GodotAudioManager3D = audios_3d.get(audio_name)
+	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -393,7 +393,7 @@ func play_3d(audio_name: String, from_position: float = 0.0) -> void:
 
 ## Stops all sounds from this node.
 func stop_3d(audio_name: String) -> void:
-	var find_audio: GodotAudioManager3D = audios_3d.get(audio_name)
+	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -402,7 +402,7 @@ func stop_3d(audio_name: String) -> void:
 	
 ## The sounds are paused.
 func pause_3d(audio_name: String) -> void:
-	var find_audio: GodotAudioManager3D = audios_3d.get(audio_name)
+	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -411,7 +411,7 @@ func pause_3d(audio_name: String) -> void:
 	
 ## Resumes paused sounds.
 func unpause_3d(audio_name: String) -> void:
-	var find_audio: GodotAudioManager3D = audios_3d.get(audio_name)
+	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -420,7 +420,7 @@ func unpause_3d(audio_name: String) -> void:
 	
 ## Check if the sound is playing.
 func is_playing_3d(audio_name: String) -> bool:
-	var find_audio: GodotAudioManager3D = audios_3d.get(audio_name)
+	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return false
@@ -429,7 +429,7 @@ func is_playing_3d(audio_name: String) -> bool:
 
 ## Check if the sound is paused.
 func is_paused_3d(audio_name: String) -> bool:
-	var find_audio: GodotAudioManager3D = audios_3d.get(audio_name)
+	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return false
@@ -438,7 +438,7 @@ func is_paused_3d(audio_name: String) -> bool:
 
 ## Restarts all sounds to be played from the given to_position, in seconds. Does nothing if no sounds are playing.
 func seek_3d(audio_name: String, position: float) -> void:
-	var find_audio: GodotAudioManager3D = audios_3d.get(audio_name)
+	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -447,7 +447,7 @@ func seek_3d(audio_name: String, position: float) -> void:
 
 ## Returns the position in the AudioStream of the latest sound, in seconds. Returns 0.0 if no sounds are playing.
 func get_playback_position_3d(audio_name: String) -> float:
-	var find_audio: GodotAudioManager3D = audios_3d.get(audio_name)
+	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return 0.0
@@ -457,7 +457,7 @@ func get_playback_position_3d(audio_name: String) -> float:
 ## Returns the latest AudioStreamPlayback of this node, usually the most recently created by play(). 
 ## If no sounds are playing, this method fails and returns an empty playback.
 func get_stream_playback_3d(audio_name: String) -> AudioStreamPlayback:
-	var find_audio: GodotAudioManager3D = audios_3d.get(audio_name)
+	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return null
@@ -466,7 +466,7 @@ func get_stream_playback_3d(audio_name: String) -> AudioStreamPlayback:
 	
 ## Returns true if any sound is active, even if stream_paused is set to true. See also playing and get_stream_playback().
 func has_stream_playback_3d(audio_name: String) -> bool:
-	var find_audio: GodotAudioManager3D = audios_3d.get(audio_name)
+	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return false
@@ -475,7 +475,7 @@ func has_stream_playback_3d(audio_name: String) -> bool:
 
 ## Get 3d audio.
 func get_audio_3d(audio_name: String) -> GodotAudioManager3D:
-	var find_audio: GodotAudioManager3D = audios_3d.get(audio_name)
+	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 	return find_audio
@@ -483,7 +483,7 @@ func get_audio_3d(audio_name: String) -> GodotAudioManager3D:
 
 ## Enable loop.
 func set_loop_3d(audio_name: String, value: bool) -> void:
-	var find_audio: GodotAudioManager3D = audios_3d.get(audio_name)
+	var find_audio: GodotAudioManager3D = audios_manager_3d.get(audio_name)
 	if not find_audio:
 		push_warning("Audio (%s) was not found. Check the spelling and verify that the audio with the name actually exists."%audio_name)
 		return
@@ -491,8 +491,8 @@ func set_loop_3d(audio_name: String, value: bool) -> void:
 	
 
 func _check_audios_3d(p_warnings: PackedStringArray) -> void:
-	for key in audios_3d:
-		var audio: GodotAudioManager3D = audios_3d.get(key)
+	for key in audios_manager_3d:
+		var audio: GodotAudioManager3D = audios_manager_3d.get(key)
 		if audio:
 			if key == "":
 				p_warnings.append("There are 3d audio files without a defined name. Consider adding a name as a key to the 3d audio file that is missing a key.")
@@ -508,24 +508,24 @@ func _check_audios_3d(p_warnings: PackedStringArray) -> void:
 func _on_web_blur(args: Array) -> void:
 	var has_audio_paused: bool = false
 	
-	for key in audios_omni:
-		var audio: GodotAudioManagerOmni = audios_omni.get(key)
+	for key in audios_manager_omni:
+		var audio: GodotAudioManagerOmni = audios_manager_omni.get(key)
 		if audio and audio.pause_on_blur and audio.get_audio():
 			if audio.get_audio().playing:
 				has_audio_paused = true
 				audio.get_audio().set_meta("paused_on_blur", true)
 				audio.get_audio().stream_paused = true
 	
-	for key in audios_2d:
-		var audio: GodotAudioManager2D = audios_2d.get(key)
+	for key in audios_manager_2d:
+		var audio: GodotAudioManager2D = audios_manager_2d.get(key)
 		if audio and audio.pause_on_blur and audio.get_audio():
 			if audio.get_audio().playing:
 				has_audio_paused = true
 				audio.get_audio().set_meta("paused_on_blur", true)
 				audio.get_audio().stream_paused = true
 	
-	for key in audios_3d:
-		var audio: GodotAudioManager3D = audios_3d.get(key)
+	for key in audios_manager_3d:
+		var audio: GodotAudioManager3D = audios_manager_3d.get(key)
 		if audio and audio.pause_on_blur and audio.get_audio():
 			if audio.get_audio().playing:
 				has_audio_paused = true
@@ -542,20 +542,20 @@ func _on_web_blur(args: Array) -> void:
 	
 	
 func _on_web_focus(args: Array) -> void:
-	for key in audios_omni:
-		var audio: GodotAudioManagerOmni = audios_omni.get(key)
+	for key in audios_manager_omni:
+		var audio: GodotAudioManagerOmni = audios_manager_omni.get(key)
 		if audio and audio.get_audio() and audio.get_audio().has_meta("paused_on_blur"):
 			audio.get_audio().set_meta("paused_on_blur", false)
 			audio.get_audio().stream_paused = false
 			
-	for key in audios_2d:
-		var audio: GodotAudioManager2D = audios_2d.get(key)
+	for key in audios_manager_2d:
+		var audio: GodotAudioManager2D = audios_manager_2d.get(key)
 		if audio and audio.get_audio() and audio.get_audio().has_meta("paused_on_blur"):
 			audio.get_audio().set_meta("paused_on_blur", false)
 			audio.get_audio().stream_paused = false
 			
-	for key in audios_3d:
-		var audio: GodotAudioManager3D = audios_3d.get(key)
+	for key in audios_manager_3d:
+		var audio: GodotAudioManager3D = audios_manager_3d.get(key)
 		if audio and audio.get_audio() and audio.get_audio().has_meta("paused_on_blur"):
 			audio.get_audio().set_meta("paused_on_blur", false)
 			audio.get_audio().stream_paused = false
