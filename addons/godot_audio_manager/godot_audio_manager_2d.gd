@@ -253,9 +253,11 @@ func _init_owner(p_owner: GodotAudioManager, p_name: String, p_parent: Node2D) -
 	_set_loop(stream, loop)
 	
 	if p_parent:
-		p_parent.add_child(_audio_stream_player)
+		p_parent.add_child.call_deferred(_audio_stream_player)
 	else:
 		_owner.add_child(_audio_stream_player)
+		
+	await _audio_stream_player.tree_entered
 	_audio_stream_player.finished.connect(_on_audio_stream_player_finished)
 	
 	
