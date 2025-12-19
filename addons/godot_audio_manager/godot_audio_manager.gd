@@ -29,7 +29,7 @@ class_name GodotAudioManager extends Node
 @export var parent_2d: Node2D:
 	set(value):
 		parent_2d = value
-		if not is_node_ready(): return
+		if Engine.is_editor_hint() or not is_node_ready(): return
 		for key in audios_2d:
 			var audio_2d: GodotAudioManager2D = audios_2d.get(key)
 			if audio_2d:
@@ -53,7 +53,7 @@ class_name GodotAudioManager extends Node
 @export var parent_3d: Node3D:
 	set(value):
 		parent_3d = value
-		if not is_node_ready(): return
+		if Engine.is_editor_hint() or not is_node_ready(): return
 		for key in audios_3d:
 			var audio_3d: GodotAudioManager3D = audios_3d.get(key)
 			if audio_3d:
