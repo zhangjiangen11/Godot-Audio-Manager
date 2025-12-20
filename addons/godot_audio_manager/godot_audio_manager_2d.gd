@@ -232,4 +232,4 @@ func _init_owner(p_owner: GodotAudioManager, p_name: String, p_audio_ref: AudioS
 		_audio_preview.area_mask = area_mask
 		_audio_preview.playback_type = playback_type
 
-		_owner.add_child(_audio_preview)
+		_owner.add_child.call_deferred(_audio_preview)

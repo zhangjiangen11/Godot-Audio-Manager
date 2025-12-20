@@ -337,4 +337,4 @@ func _init_owner(p_owner: GodotAudioManager, p_name: String, p_audio_ref: AudioS
 		_audio_preview.attenuation_filter_db = attenuation_filter_db
 		_audio_preview.doppler_tracking = doppler_tracking
 		
-		_owner.add_child(_audio_preview)
+		_owner.add_child.call_deferred(_audio_preview)
