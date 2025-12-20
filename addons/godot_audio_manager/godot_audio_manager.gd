@@ -19,7 +19,7 @@ class_name GodotAudioManager extends Node
 			var audio_omni: GodotAudioManagerOmni = audios_manager_omni.get(key)
 			if audio_omni:
 				if not has_audio_stream_player(key):
-					audios_stream_players[key] = _create_stream_player(audio_omni, key)
+					audios_stream_players[key] = await _create_stream_player(audio_omni, key)
 		update_configuration_warnings()
 
 @export_subgroup("Audios 2D")
@@ -58,7 +58,7 @@ class_name GodotAudioManager extends Node
 			var audio_2d: GodotAudioManager2D = audios_manager_2d.get(key)
 			if audio_2d:
 				if not has_audio_stream_player_2d(key):
-					audios_stream_players_2d[key] = _create_stream_player_2d(audio_2d, key)
+					audios_stream_players_2d[key] = await _create_stream_player_2d(audio_2d, key)
 		update_configuration_warnings()
 
 @export_subgroup("Audios 3D")
@@ -97,7 +97,7 @@ class_name GodotAudioManager extends Node
 			var audio_3d: GodotAudioManager3D = audios_manager_3d.get(key)
 			if audio_3d:
 				if not has_audio_stream_player_3d(key):
-					audios_stream_players_3d[key] = _create_stream_player_3d(audio_3d, key)
+					audios_stream_players_3d[key] = await _create_stream_player_3d(audio_3d, key)
 		update_configuration_warnings()
 #endregion *****************************************************************************************
 
@@ -153,17 +153,17 @@ func _ready() -> void:
 	for key in audios_manager_omni:
 		var audio_omni: GodotAudioManagerOmni = audios_manager_omni.get(key)
 		if audio_omni:
-			audios_stream_players[key] = _create_stream_player(audio_omni, key)
+			audios_stream_players[key] = await _create_stream_player(audio_omni, key)
 			
 	for key in audios_manager_2d:
 		var audio_2d: GodotAudioManager2D = audios_manager_2d.get(key)
 		if audio_2d:
-			audios_stream_players_2d[key] = _create_stream_player_2d(audio_2d, key)
+			audios_stream_players_2d[key] = await _create_stream_player_2d(audio_2d, key)
 
 	for key in audios_manager_3d:
 		var audio_3d: GodotAudioManager3D = audios_manager_3d.get(key)
 		if audio_3d:
-			audios_stream_players_3d[key] = _create_stream_player_3d(audio_3d, key)
+			audios_stream_players_3d[key] = await _create_stream_player_3d(audio_3d, key)
 
 	if OS.has_feature("web"):
 		_window_ref.addEventListener("blur", _blur_ref)
@@ -317,6 +317,8 @@ func _create_stream_player(audio_omni: GodotAudioManagerOmni, audio_name: String
 	audio_stream_player.finished.connect(cb)
 
 	add_child.call_deferred(audio_stream_player)
+
+	await audio_stream_player.tree_entered
 
 	audio_omni._init_owner(self, audio_name, audio_stream_player)
 	return audio_stream_player
@@ -491,10 +493,11 @@ func _create_stream_player_2d(audio_2d: GodotAudioManager2D, audio_name: String)
 
 	if parent_2d:
 		parent_2d.add_child.call_deferred(audio_stream_player_2d)
-		# await audio_stream_player_2d.tree_entered
 	else:
 		add_child.call_deferred(audio_stream_player_2d)
 
+	await audio_stream_player_2d.tree_entered
+	
 	audio_2d._init_owner(self, audio_name, audio_stream_player_2d)
 	return audio_stream_player_2d
 
@@ -676,9 +679,10 @@ func _create_stream_player_3d(audio_3d: GodotAudioManager3D, audio_name: String)
 	
 	if parent_3d:
 		parent_3d.add_child.call_deferred(audio_stream_player_3d)
-		# await audio_stream_player_3d.tree_entered
 	else:
 		add_child.call_deferred(audio_stream_player_3d)
+	
+	await audio_stream_player_3d.tree_entered
 	
 	audio_3d._init_owner(self, audio_name, audio_stream_player_3d)
 	return audio_stream_player_3d
