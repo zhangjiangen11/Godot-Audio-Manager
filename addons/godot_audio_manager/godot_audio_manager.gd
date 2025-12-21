@@ -149,7 +149,16 @@ const AUDIO_STREAM_OGGVORBIS_CLASS_NAME: String = "AudioStreamOggVorbis"
 
 
 #region ENGINE METHODS *****************************************************************************
-func _ready() -> void:
+func _exit_tree() -> void:
+	audios_stream_players = {}
+	audios_stream_players_2d = {}
+	audios_stream_players_3d = {}
+	GodotAudioManagerOmni._audios_ref = []
+	GodotAudioManager2D._audios_ref = []
+	GodotAudioManager3D._audios_ref = []
+
+
+func _enter_tree() -> void:
 	for key in audios_manager_omni:
 		var audio_omni: GodotAudioManagerOmni = audios_manager_omni.get(key)
 		if audio_omni:
@@ -165,6 +174,8 @@ func _ready() -> void:
 		if audio_3d:
 			audios_stream_players_3d[key] = await _create_stream_player_3d(audio_3d, key)
 
+
+func _ready() -> void:
 	if OS.has_feature("web"):
 		_window_ref.addEventListener("blur", _blur_ref)
 		_window_ref.addEventListener("focus", _focus_ref)
