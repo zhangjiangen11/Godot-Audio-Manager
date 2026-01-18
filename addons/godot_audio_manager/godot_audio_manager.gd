@@ -201,6 +201,36 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 	
 #region AUDIO OMNI *********************************************************************************
+## Start an audio playback with a start and end timer. Works like an audio clip.
+func play_cut_omni(audio_name: String, start_time: float, end_time: float) -> void:
+	var duration := end_time - start_time
+	if duration <= 0.0:
+		push_warning("The audio duration cannot be less than or equal to zero.")
+		return
+
+	var find_audio: AudioStreamPlayer = get_audio_stream_player(audio_name)
+	if not find_audio:
+		return
+		
+	var callable: Callable = Callable(func():
+		find_audio.stop()
+		finished_omni.emit(audio_name)
+	)
+	
+	var timer: Timer = find_audio.get_node("timer_omni") as Timer
+	
+	timer.stop()
+	
+	for s in timer.get_signal_connection_list("timeout"):
+		timer.timeout.disconnect(s.callable)
+		
+	timer.timeout.connect(callable)
+	timer.wait_time = duration
+
+	find_audio.play(start_time)
+	timer.start()
+	
+	
 ## Plays a sound from the beginning, or the given from_position in seconds.
 func play_omni(audio_name: String, from_position: float = 0.0) -> void:
 	var find_audio: AudioStreamPlayer = get_audio_stream_player(audio_name)
@@ -310,6 +340,7 @@ func _create_stream_player(audio_omni: GodotAudioManagerOmni, audio_name: String
 	
 	audio_stream_player.set_meta(META_OMNI, true)
 	audio_stream_player.set_meta("name", audio_name)
+	audio_stream_player.add_child(_create_timer_omni())
 	
 	audio_stream_player.stream = audio_omni.stream
 	audio_stream_player.volume_db = audio_omni.volume_db
@@ -335,6 +366,15 @@ func _create_stream_player(audio_omni: GodotAudioManagerOmni, audio_name: String
 	return audio_stream_player
 
 
+func _create_timer_omni() -> Timer:
+	var timer: Timer = Timer.new()
+	timer.one_shot = true
+	timer.autostart = false
+	timer.ignore_time_scale = true
+	timer.name = "timer_omni"
+	return timer
+	
+	
 func _on_omni_finished(audio_name: String) -> void:
 	if not Engine.is_editor_hint():
 		finished_omni.emit(audio_name)
@@ -355,6 +395,36 @@ func _check_audios_omni(p_warnings: PackedStringArray) -> void:
 
 
 #region AUDIO 2D *********************************************************************************
+## Start an audio playback with a start and end timer. Works like an audio clip.
+func play_cut_2d(audio_name: String, start_time: float, end_time: float) -> void:
+	var duration := end_time - start_time
+	if duration <= 0.0:
+		push_warning("The audio duration cannot be less than or equal to zero.")
+		return
+
+	var find_audio: AudioStreamPlayer2D = get_audio_stream_player_2d(audio_name)
+	if not find_audio:
+		return
+		
+	var callable: Callable = Callable(func():
+		find_audio.stop()
+		finished_2d.emit(audio_name)
+	)
+	
+	var timer: Timer = find_audio.get_node("timer_2d") as Timer
+	
+	timer.stop()
+	
+	for s in timer.get_signal_connection_list("timeout"):
+		timer.timeout.disconnect(s.callable)
+		
+	timer.timeout.connect(callable)
+	timer.wait_time = duration
+
+	find_audio.play(start_time)
+	timer.start()
+	
+
 ## Plays a sound from the beginning, or the given from_position in seconds.
 func play_2d(audio_name: String, from_position: float = 0.0) -> void:
 	if parent_2d:
@@ -482,6 +552,7 @@ func _create_stream_player_2d(audio_2d: GodotAudioManager2D, audio_name: String)
 	
 	audio_stream_player_2d.set_meta(META_2D, true)
 	audio_stream_player_2d.set_meta("name", audio_name)
+	audio_stream_player_2d.add_child(_create_timer_2d())
 	
 	audio_stream_player_2d.stream = audio_2d.stream
 	audio_stream_player_2d.volume_db = audio_2d.volume_db
@@ -513,6 +584,15 @@ func _create_stream_player_2d(audio_2d: GodotAudioManager2D, audio_name: String)
 	return audio_stream_player_2d
 
 
+func _create_timer_2d() -> Timer:
+	var timer: Timer = Timer.new()
+	timer.one_shot = true
+	timer.autostart = false
+	timer.ignore_time_scale = true
+	timer.name = "timer_2d"
+	return timer
+	
+
 func _on_2d_finished(audio_name: String) -> void:
 	if not Engine.is_editor_hint():
 		finished_2d.emit(audio_name)
@@ -533,6 +613,36 @@ func _check_audios_2d(p_warnings: PackedStringArray) -> void:
 
 
 #region AUDIO 3D *********************************************************************************
+## Start an audio playback with a start and end timer. Works like an audio clip.
+func play_cut_3d(audio_name: String, start_time: float, end_time: float) -> void:
+	var duration := end_time - start_time
+	if duration <= 0.0:
+		push_warning("The audio duration cannot be less than or equal to zero.")
+		return
+
+	var find_audio: AudioStreamPlayer3D = get_audio_stream_player_3d(audio_name)
+	if not find_audio:
+		return
+		
+	var callable: Callable = Callable(func():
+		find_audio.stop()
+		finished_3d.emit(audio_name)
+	)
+	
+	var timer: Timer = find_audio.get_node("timer_3d") as Timer
+	
+	timer.stop()
+	
+	for s in timer.get_signal_connection_list("timeout"):
+		timer.timeout.disconnect(s.callable)
+		
+	timer.timeout.connect(callable)
+	timer.wait_time = duration
+
+	find_audio.play(start_time)
+	timer.start()
+	
+	
 ## Plays a sound from the beginning, or the given from_position in seconds.
 func play_3d(audio_name: String, from_position: float = 0.0) -> void:
 	if parent_3d:
@@ -660,6 +770,7 @@ func _create_stream_player_3d(audio_3d: GodotAudioManager3D, audio_name: String)
 	
 	audio_stream_player_3d.set_meta(META_3D, true)
 	audio_stream_player_3d.set_meta("name", audio_name)
+	audio_stream_player_3d.add_child(_create_timer_3d())
 	
 	audio_stream_player_3d.stream = audio_3d.stream
 	audio_stream_player_3d.attenuation_model = audio_3d.attenuation_model
@@ -697,6 +808,15 @@ func _create_stream_player_3d(audio_3d: GodotAudioManager3D, audio_name: String)
 	
 	audio_3d._init_owner(self, audio_name, audio_stream_player_3d)
 	return audio_stream_player_3d
+
+
+func _create_timer_3d() -> Timer:
+	var timer: Timer = Timer.new()
+	timer.one_shot = true
+	timer.autostart = false
+	timer.ignore_time_scale = true
+	timer.name = "timer_3d"
+	return timer
 
 
 func _on_3d_finished(audio_name: String) -> void:
