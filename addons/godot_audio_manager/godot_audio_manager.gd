@@ -218,14 +218,14 @@ func play_cut_omni(audio_name: String, start_time: float, end_time: float) -> vo
 	)
 	
 	var timer: Timer = find_audio.get_node("timer_omni") as Timer
-	
+	timer.paused = false
 	timer.stop()
 	
 	for s in timer.get_signal_connection_list("timeout"):
 		timer.timeout.disconnect(s.callable)
 		
 	timer.timeout.connect(callable)
-	timer.wait_time = duration
+	timer.wait_time = duration / find_audio.pitch_scale
 
 	find_audio.play(start_time)
 	timer.start()
@@ -236,6 +236,7 @@ func play_omni(audio_name: String, from_position: float = 0.0) -> void:
 	var find_audio: AudioStreamPlayer = get_audio_stream_player(audio_name)
 	if find_audio:
 		if not find_audio.is_inside_tree(): await find_audio.tree_entered
+		_reset_timer_omni(find_audio)
 		find_audio.play(from_position)
 
 
@@ -244,6 +245,7 @@ func stop_omni(audio_name: String) -> void:
 	var find_audio: AudioStreamPlayer = get_audio_stream_player(audio_name)
 	if find_audio:
 		if not find_audio.is_inside_tree(): await find_audio.tree_entered
+		_reset_timer_omni(find_audio)
 		find_audio.stop()
 	
 	
@@ -252,6 +254,8 @@ func pause_omni(audio_name: String) -> void:
 	var find_audio: AudioStreamPlayer = get_audio_stream_player(audio_name)
 	if find_audio:
 		if not find_audio.is_inside_tree(): await find_audio.tree_entered
+		var timer: Timer = find_audio.get_node("timer_omni") as Timer
+		timer.paused = true
 		find_audio.stream_paused = true
 	
 	
@@ -260,6 +264,8 @@ func unpause_omni(audio_name: String) -> void:
 	var find_audio: AudioStreamPlayer = get_audio_stream_player(audio_name)
 	if find_audio:
 		if not find_audio.is_inside_tree(): await find_audio.tree_entered
+		var timer: Timer = find_audio.get_node("timer_omni") as Timer
+		timer.paused = false
 		find_audio.stream_paused = false
 	
 	
@@ -375,6 +381,14 @@ func _create_timer_omni() -> Timer:
 	return timer
 	
 	
+func _reset_timer_omni(find_audio: AudioStreamPlayer) -> void:
+	var timer: Timer = find_audio.get_node("timer_omni") as Timer
+	if not timer.is_stopped():
+		timer.stop()
+	for s in timer.get_signal_connection_list("timeout"):
+		timer.timeout.disconnect(s.callable)
+		
+	
 func _on_omni_finished(audio_name: String) -> void:
 	if not Engine.is_editor_hint():
 		finished_omni.emit(audio_name)
@@ -412,14 +426,14 @@ func play_cut_2d(audio_name: String, start_time: float, end_time: float) -> void
 	)
 	
 	var timer: Timer = find_audio.get_node("timer_2d") as Timer
-	
+	timer.paused = false
 	timer.stop()
 	
 	for s in timer.get_signal_connection_list("timeout"):
 		timer.timeout.disconnect(s.callable)
 		
 	timer.timeout.connect(callable)
-	timer.wait_time = duration
+	timer.wait_time = duration / find_audio.pitch_scale
 
 	find_audio.play(start_time)
 	timer.start()
@@ -433,6 +447,7 @@ func play_2d(audio_name: String, from_position: float = 0.0) -> void:
 	var find_audio: AudioStreamPlayer2D = get_audio_stream_player_2d(audio_name)
 	if find_audio:
 		if not find_audio.is_inside_tree(): await find_audio.tree_entered
+		_reset_timer_2d(find_audio)
 		find_audio.play(from_position)
 
 
@@ -444,6 +459,7 @@ func stop_2d(audio_name: String) -> void:
 	var find_audio: AudioStreamPlayer2D = get_audio_stream_player_2d(audio_name)
 	if find_audio:
 		if not find_audio.is_inside_tree(): await find_audio.tree_entered
+		_reset_timer_2d(find_audio)
 		find_audio.stop()
 	
 	
@@ -455,6 +471,8 @@ func pause_2d(audio_name: String) -> void:
 	var find_audio: AudioStreamPlayer2D = get_audio_stream_player_2d(audio_name)
 	if find_audio:
 		if not find_audio.is_inside_tree(): await find_audio.tree_entered
+		var timer: Timer = find_audio.get_node("timer_2d") as Timer
+		timer.paused = true
 		find_audio.stream_paused = true
 	
 	
@@ -466,6 +484,8 @@ func unpause_2d(audio_name: String) -> void:
 	var find_audio: AudioStreamPlayer2D = get_audio_stream_player_2d(audio_name)
 	if find_audio:
 		if not find_audio.is_inside_tree(): await find_audio.tree_entered
+		var timer: Timer = find_audio.get_node("timer_2d") as Timer
+		timer.paused = false
 		find_audio.stream_paused = false
 	
 	
@@ -593,6 +613,14 @@ func _create_timer_2d() -> Timer:
 	return timer
 	
 
+func _reset_timer_2d(find_audio: AudioStreamPlayer2D) -> void:
+	var timer: Timer = find_audio.get_node("timer_2d") as Timer
+	if not timer.is_stopped():
+		timer.stop()
+	for s in timer.get_signal_connection_list("timeout"):
+		timer.timeout.disconnect(s.callable)
+		
+
 func _on_2d_finished(audio_name: String) -> void:
 	if not Engine.is_editor_hint():
 		finished_2d.emit(audio_name)
@@ -630,14 +658,14 @@ func play_cut_3d(audio_name: String, start_time: float, end_time: float) -> void
 	)
 	
 	var timer: Timer = find_audio.get_node("timer_3d") as Timer
-	
+	timer.paused = false
 	timer.stop()
 	
 	for s in timer.get_signal_connection_list("timeout"):
 		timer.timeout.disconnect(s.callable)
 		
 	timer.timeout.connect(callable)
-	timer.wait_time = duration
+	timer.wait_time = duration / find_audio.pitch_scale
 
 	find_audio.play(start_time)
 	timer.start()
@@ -651,6 +679,7 @@ func play_3d(audio_name: String, from_position: float = 0.0) -> void:
 	var find_audio: AudioStreamPlayer3D = get_audio_stream_player_3d(audio_name)
 	if find_audio:
 		if not find_audio.is_inside_tree(): await find_audio.tree_entered
+		_reset_timer_3d(find_audio)
 		find_audio.play(from_position)
 
 
@@ -662,6 +691,7 @@ func stop_3d(audio_name: String) -> void:
 	var find_audio: AudioStreamPlayer3D = get_audio_stream_player_3d(audio_name)
 	if find_audio:
 		if not find_audio.is_inside_tree(): await find_audio.tree_entered
+		_reset_timer_3d(find_audio)
 		find_audio.stop()
 	
 	
@@ -673,6 +703,8 @@ func pause_3d(audio_name: String) -> void:
 	var find_audio: AudioStreamPlayer3D = get_audio_stream_player_3d(audio_name)
 	if find_audio:
 		if not find_audio.is_inside_tree(): await find_audio.tree_entered
+		var timer: Timer = find_audio.get_node("timer_3d") as Timer
+		timer.paused = true
 		find_audio.stream_paused = true
 	
 	
@@ -684,6 +716,8 @@ func unpause_3d(audio_name: String) -> void:
 	var find_audio: AudioStreamPlayer3D = get_audio_stream_player_3d(audio_name)
 	if find_audio:
 		if not find_audio.is_inside_tree(): await find_audio.tree_entered
+		var timer: Timer = find_audio.get_node("timer_3d") as Timer
+		timer.paused = false
 		find_audio.stream_paused = false
 	
 	
@@ -817,6 +851,14 @@ func _create_timer_3d() -> Timer:
 	timer.ignore_time_scale = true
 	timer.name = "timer_3d"
 	return timer
+
+
+func _reset_timer_3d(find_audio: AudioStreamPlayer3D) -> void:
+	var timer: Timer = find_audio.get_node("timer_3d") as Timer
+	if not timer.is_stopped():
+		timer.stop()
+	for s in timer.get_signal_connection_list("timeout"):
+		timer.timeout.disconnect(s.callable)
 
 
 func _on_3d_finished(audio_name: String) -> void:
