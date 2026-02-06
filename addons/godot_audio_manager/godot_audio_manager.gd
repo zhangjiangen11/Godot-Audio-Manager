@@ -44,7 +44,7 @@ class_name GodotAudioManager extends Node
 				var audio: AudioStreamPlayer2D = get_audio_stream_player_2d(key)
 				if audio and audio.get_parent():
 					if audio.get_parent() != self:
-						audio.reparent(self)
+						audio.reparent(self )
 						audio.position = Vector2.ZERO
 					
 		update_configuration_warnings()
@@ -83,7 +83,7 @@ class_name GodotAudioManager extends Node
 				var audio: AudioStreamPlayer3D = get_audio_stream_player_3d(key)
 				if audio and audio.get_parent():
 					if audio.get_parent() != self:
-						audio.reparent(self)
+						audio.reparent(self )
 						audio.position = Vector3.ZERO
 		
 		update_configuration_warnings()
@@ -112,6 +112,9 @@ signal finished_2d(audio_name)
 
 ## Emitted when audio 3d ends.
 signal finished_3d(audio_name)
+
+## Emitted when all audio files are ready.
+signal audio_ready
 @warning_ignore_restore("unused_signal")
 #endregion *****************************************************************************************
 
@@ -127,6 +130,7 @@ var _focus_ref = JavaScriptBridge.create_callback(_on_web_focus)
 var audios_stream_players: Dictionary[String, AudioStreamPlayer]
 var audios_stream_players_2d: Dictionary[String, AudioStreamPlayer2D]
 var audios_stream_players_3d: Dictionary[String, AudioStreamPlayer3D]
+var is_audio_ready: bool = false
 #endregion ****************************************************************************************
 
 
@@ -173,7 +177,8 @@ func _enter_tree() -> void:
 		var audio_3d: GodotAudioManager3D = audios_manager_3d.get(key)
 		if audio_3d:
 			audios_stream_players_3d[key] = await _create_stream_player_3d(audio_3d, key)
-
+	is_audio_ready = true
+	audio_ready.emit()
 
 func _ready() -> void:
 	if OS.has_feature("web"):
@@ -368,7 +373,7 @@ func _create_stream_player(audio_omni: GodotAudioManagerOmni, audio_name: String
 
 	await audio_stream_player.tree_entered
 
-	audio_omni._init_owner(self, audio_name, audio_stream_player)
+	audio_omni._init_owner(self , audio_name, audio_stream_player)
 	return audio_stream_player
 
 
@@ -600,7 +605,7 @@ func _create_stream_player_2d(audio_2d: GodotAudioManager2D, audio_name: String)
 
 	await audio_stream_player_2d.tree_entered
 	
-	audio_2d._init_owner(self, audio_name, audio_stream_player_2d)
+	audio_2d._init_owner(self , audio_name, audio_stream_player_2d)
 	return audio_stream_player_2d
 
 
@@ -840,7 +845,7 @@ func _create_stream_player_3d(audio_3d: GodotAudioManager3D, audio_name: String)
 	
 	await audio_stream_player_3d.tree_entered
 	
-	audio_3d._init_owner(self, audio_name, audio_stream_player_3d)
+	audio_3d._init_owner(self , audio_name, audio_stream_player_3d)
 	return audio_stream_player_3d
 
 
